@@ -22,7 +22,15 @@
             "externalCommands": {
                 "CLANG_TRIPLE": "aarch64-linux-gnu-",
                 "CROSS_COMPILE": "proton-clang/bin/aarch64-linux-gnu-",
-                "CROSS_COMPILE_ARM32": "proton-clang/bin/arm-linux-gnueabi-"
+                "CROSS_COMPILE_ARM32": "proton-clang/bin/arm-linux-gnueabi-",
+                "AS": "proton-clang/bin/llvm-as", 
+                "AR": "proton-clang/bin/llvm-ar",  
+                "NM":"proton-clang/bin/llvm-nm" ,  
+                "OBJCOPY":"proton-clang/bin/llvm-objcopy",  
+                "OBJDUMP":"proton-clang/bin/llvm-objdump",  
+                "STRIP":"proton-clang/bin/llvm-strip",  
+                "LD":"proton-clang/bin/ld.lld", 
+                "LTO": "thin"
             }
         },
         "AnyKernel3": {
