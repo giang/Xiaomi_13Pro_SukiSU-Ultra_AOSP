@@ -2,7 +2,7 @@ name: hfdem-build
 permissions:
   contents: write  # Allow writing to repository contents (for pushing tags)
   actions: write   # Allows triggering actions
-
+ 
 on:
   workflow_call: # This allows this workflow to be called from another workflow
     inputs:
@@ -169,7 +169,7 @@ jobs:
           cd "$CONFIG"
           
           echo "Building the kernel..."
-          if [ "${{ inputs.codename }}" == "gki" ]; then
+          if [ "${{ inputs.codename }}" == "zumapro" ]; then
             export KCFLAGS="-march=armv8.6-a -O3 --param=min-pagesize=0"
           fi
           make ${{ inputs.codename }}_defconfig -j$(nproc --all)
