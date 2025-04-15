@@ -38,7 +38,14 @@ jobs:
       - name: Installing dependencies
         run: |
           sudo apt update
-          sudo apt install -y libelf-dev libelf1 libdw-dev libdwarf-dev liblz4-tool gcc-aarch64-linux-gnu lld
+          sudo apt install -y libelf-dev libelf1 libdw-dev libdwarf-dev liblz4-tool gcc-aarch64-linux-gnu
+          sudo apt install -y curl git ftp lftp wget libarchive-tools ccache python2 python2-dev python3
+          sudo apt install -y pngcrush schedtool dpkg-dev liblz4-tool make optipng maven dwarves device-tree-compiler 
+          sudo apt install -y libc6-dev-i386 libelf-dev lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc
+          sudo apt install -y libxml2-utils libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools lzop flex tree
+          sudo apt install -y build-essential bc gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev libfl-dev
+          sudo apt install -y pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl 
+          sudo apt install -y zip unzip tar gzip bzip2 rar unrar llvm g++-multilib bison gperf zlib1g-dev automake
 
       - name: Set CONFIG Environment Variable
         run: |
@@ -168,20 +175,7 @@ jobs:
           echo "Changing to configuration directory: $CONFIG..."
           cd "$CONFIG"
           
-          echo "Cleaning previous builds (mrproper)..."
-          make mrproper
-
           echo "Building the kernel..."
-          if [ "${{ inputs.codename }}" == "zumapro" ]; then
-            export KCFLAGS="-march=armv8.6-a -O3 --param=min-pagesize=0"
-          fi
-
-          export ARCH=arm64
-          export SUBARCH=arm64
-          export CC=clang
-          export LLVM=1
-          export LLVM_IAS=1
-
           make ${{ inputs.codename }}_defconfig -j$(nproc --all)
           make -j$(nproc --all)
 
