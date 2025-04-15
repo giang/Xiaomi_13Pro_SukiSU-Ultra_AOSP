@@ -9,9 +9,10 @@
         },
         "toolchains": [
             {
-              "name": "clang",
-              "url": "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r547379.tar.gz",
-              "binaryEnv": ["./bin"]
+                "name": "proton-clang",
+                "repo": "https://github.com/kdrag0n/proton-clang",
+                "branch": "master",
+                "binaryEnv": ["./bin"]
             }
         ],
         "enableCcache": true,
