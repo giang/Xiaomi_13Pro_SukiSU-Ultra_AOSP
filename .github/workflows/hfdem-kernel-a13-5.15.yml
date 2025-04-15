@@ -33,18 +33,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - sub_level: "233"
-          os_patch_level: "2025-03"
-          revision: "r1"
+        - os_patch_level: "2025-03"
     uses: ./.github/workflows/gki-kernel.yml
     secrets: inherit
     with:
       make_release: ${{ inputs.make_release || false }}
       android_version: "android13"
       kernel_version: "5.15"
-      sub_level: ${{ matrix.sub_level }}
       os_patch_level: ${{ matrix.os_patch_level }}
-      revision: ${{ matrix.revision }}
       kernelsu_variant: ${{ inputs.kernelsu_variant || 'Next' }}
       kernelsu_branch: ${{ inputs.kernelsu_branch || 'Dev' }}
       kernelsu_branch_other: ${{ inputs.kernelsu_branch_other || '' }}
