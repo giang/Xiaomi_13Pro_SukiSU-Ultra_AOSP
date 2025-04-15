@@ -168,10 +168,20 @@ jobs:
           echo "Changing to configuration directory: $CONFIG..."
           cd "$CONFIG"
           
+          echo "Cleaning previous builds (mrproper)..."
+          make mrproper
+
           echo "Building the kernel..."
           if [ "${{ inputs.codename }}" == "zumapro" ]; then
             export KCFLAGS="-march=armv8.6-a -O3 --param=min-pagesize=0"
           fi
+
+          export ARCH=arm64
+          export SUBARCH=arm64
+          export CC=clang
+          export LLVM=1
+          export LLVM_IAS=1
+
           make ${{ inputs.codename }}_defconfig -j$(nproc --all)
           make -j$(nproc --all)
 
