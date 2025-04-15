@@ -5,7 +5,7 @@ permissions:
 
 on:
   workflow_call:  # This allows this workflow to be called from another workflow
-  
+
 jobs:
   build-kernel-sultan-kernelsu-susfs:
     uses: ./.github/workflows/hfdem-build.yml
