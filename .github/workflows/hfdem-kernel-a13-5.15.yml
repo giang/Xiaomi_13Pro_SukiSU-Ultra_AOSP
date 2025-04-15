@@ -17,7 +17,7 @@ on:
       kernelsu_variant:
         required: true
         type: string
-        default: Next
+        default: Official
       kernelsu_branch:
         required: true
         type: string
