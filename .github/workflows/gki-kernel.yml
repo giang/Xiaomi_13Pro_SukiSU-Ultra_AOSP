@@ -44,7 +44,7 @@ jobs:
       CCACHE_HARDLINK: "true"
 
     steps:
-      - name: Maximize build space
+      - name: 最大化構建空間
         uses: easimon/maximize-build-space@master
         with:
           root-reserve-mb: 8192
@@ -55,7 +55,7 @@ jobs:
           remove-haskell: "true"
           remove-codeql: "true"
 
-      - name: Set CONFIG Environment Variable
+      - name: 設定 CONFIG 環境變數
         run: |
           # Set CONFIG dynamically based on inputs values
           CONFIG="${{ inputs.android_version }}-${{ inputs.kernel_version }}-${{ inputs.sub_level }}"
@@ -65,11 +65,11 @@ jobs:
 
           echo "CONFIG set to: $CONFIG"
 
-      # Install ccache
-      - name: Install ccache
+      # 安裝 ccache
+      - name: 安裝 ccache
         run: sudo apt update && sudo apt install -y ccache
 
-      - name: Set up ccache
+      - name: 設定 ccache
         run: |
           mkdir -p ~/.cache/bazel # Ensure the directory exists
           ccache --version
@@ -85,7 +85,7 @@ jobs:
           restore-keys: |
             ${{ inputs.android_version }}-${{ inputs.kernel_version }}-${{ inputs.sub_level }}-ccache-
       
-      - name: Cache toolchain
+      - name: 快取 toolchain
         id: cache-toolchain
         uses: actions/cache@v4
         with:
@@ -94,8 +94,8 @@ jobs:
             mkbootimg
           key: toolchain-${{ runner.os }}-v1
 
-      # Step 2: Download toolchain if cache was not found
-      - name: Download toolchain (if cache not found)
+      # 步驟 2: 下載 toolchain（如果未找到快取）
+      - name: 下載 toolchain（如果未找到快取）
         if: steps.cache-toolchain.outputs.cache-hit != 'true'
         run: |
           AOSP_MIRROR=https://android.googlesource.com
@@ -103,7 +103,7 @@ jobs:
           git clone $AOSP_MIRROR/kernel/prebuilts/build-tools -b $BRANCH --depth 1 kernel-build-tools
           git clone $AOSP_MIRROR/platform/system/tools/mkbootimg -b $BRANCH --depth 1 mkbootimg
 
-      - name: Set environment variables
+      - name: 設定環境變數
         run: |
           echo "AVBTOOL=$GITHUB_WORKSPACE/kernel-build-tools/linux-x86/bin/avbtool" >> $GITHUB_ENV
           echo "MKBOOTIMG=$GITHUB_WORKSPACE/mkbootimg/mkbootimg.py" >> $GITHUB_ENV
@@ -114,14 +114,14 @@ jobs:
           BOOT_SIGN_KEY: ${{ secrets.BOOT_SIGN_KEY }}
         run: |
           if [ ! -z "$BOOT_SIGN_KEY" ]; then
-            echo "$BOOT_SIGN_KEY" > ./kernel-build-tools/linux-x86/share/avb/testkey_rsa2048.pem
+            openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 > ./kernel-build-tools/linux-x86/share/avb/testkey_rsa2048.pem
             echo "BOOT_SIGN_KEY_PATH=$GITHUB_WORKSPACE/kernel-build-tools/linux-x86/share/avb/testkey_rsa2048.pem" >> $GITHUB_ENV
           else
-            echo "BOOT_SIGN_KEY is not set. Exiting..."
+            echo "BOOT_SIGN_KEY 尚未設定，正在退出..."
             exit 1
           fi
 
-      - name: Install Repo
+      - name: 安裝 Repo
         run: |
           # Install dependencies
           mkdir -p ./git-repo
@@ -129,7 +129,7 @@ jobs:
           chmod a+rx ./git-repo/repo
           echo "REPO=$GITHUB_WORKSPACE/./git-repo/repo" >> $GITHUB_ENV
 
-      - name: Clone AnyKernel3 and Other Dependencies
+      - name: 克隆 AnyKernel3 與其他依賴項
         run: |
           echo "Cloning AnyKernel3 and other dependencies..."
 
@@ -154,7 +154,7 @@ jobs:
 
           echo "CONFIG set to: $CONFIG"
 
-      - name: Initialize and Sync Kernel Source
+      - name: 初始化與同步內核來源
         run: |
           echo "Creating folder for configuration: $CONFIG..."
           mkdir -p "$CONFIG"
@@ -169,7 +169,7 @@ jobs:
           $REPO --version
           $REPO --trace sync -c -j$(nproc --all) --no-tags --fail-fast
 
-      - name: Copy file
+      - name: 複製檔案
         if: ${{ inputs.make_release == false }}
         run: |
           cp -r $CONFIG source-clean-$CONFIG
@@ -181,7 +181,7 @@ jobs:
           name: source-clean-${{ env.CONFIG }}
           path: source-clean-${{ env.CONFIG }}
 
-      - name: Remove file
+      - name: 刪除檔案
         if: ${{ inputs.make_release == false }}
         run: |
           rm -rf source-clean-$CONFIG
@@ -201,7 +201,7 @@ jobs:
             exit 1
           fi
       
-      - name: Add KernelSU
+      - name: 添加 KernelSU
         run: |
           echo "Changing to configuration directory: $CONFIG..."
           cd "$CONFIG"
