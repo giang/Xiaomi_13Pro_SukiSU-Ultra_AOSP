@@ -38,7 +38,7 @@ jobs:
       - name: Installing dependencies
         run: |
           sudo apt update
-          sudo apt install -y libelf-dev libelf1 libdw-dev libdwarf-dev liblz4-tool gcc-aarch64-linux-gnu
+          sudo apt install -y libelf-dev libelf1 libdw-dev libdwarf-dev liblz4-tool gcc-aarch64-linux-gnu lld
 
       - name: Set CONFIG Environment Variable
         run: |
