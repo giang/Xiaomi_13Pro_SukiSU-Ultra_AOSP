@@ -65,7 +65,6 @@ jobs:
 
           echo "CONFIG set to: $CONFIG"
 
-      # 安裝 ccache
       - name: 安裝 ccache
         run: sudo apt update && sudo apt install -y ccache
 
@@ -94,7 +93,6 @@ jobs:
             mkbootimg
           key: toolchain-${{ runner.os }}-v1
 
-      # 步驟 2: 下載 toolchain（如果未找到快取）
       - name: 下載 toolchain（如果未找到快取）
         if: steps.cache-toolchain.outputs.cache-hit != 'true'
         run: |
