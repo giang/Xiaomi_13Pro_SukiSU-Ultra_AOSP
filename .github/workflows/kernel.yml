@@ -147,7 +147,7 @@ jobs:
             if echo $toolchain | jq -e 'has("url")' > /dev/null; then
               # If from archive
               toolchain_url=$(echo $toolchain | jq -r ".url")
-              mkdir -p '$toolchain_name'
+              mkdir -p "$toolchain_name"
 
               # Download archive
               wget "$toolchain_url"
@@ -156,16 +156,16 @@ jobs:
               filename="${toolchain_url##*/}"
               case "$filename" in
                 *.zip)
-                  unzip -d $toolchain_name "$filename"
+                  unzip -d "$toolchain_name" "$filename"
                   ;;
                 *.tar)
-                  tar xvf "$filename" -C $toolchain_name
+                  tar xvf "$filename" -C "$toolchain_name"
                   ;;
                 *.tar.gz)
-                  tar zxvf "$filename" -C $toolchain_name
+                  tar zxvf "$filename" -C "$toolchain_name"
                   ;;
                 *.rar)
-                  unrar x "$filename" $toolchain_name
+                  unrar x "$filename" "$toolchain_name"
                   ;;
                 *)
                   echo "unknown file type: $filename"
