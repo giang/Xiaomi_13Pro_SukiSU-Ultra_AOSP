@@ -3,7 +3,7 @@ name: Build Kernels - KernelSU
 on:
   push:
     paths:
-      - ".github/workflows/kernel.yml"
+      - ".github/workflows/kernelsu.yml"
   workflow_dispatch:
   schedule:
     - cron: "14 13 * * 5"
