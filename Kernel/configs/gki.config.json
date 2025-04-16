@@ -9,9 +9,8 @@
         },
         "toolchains": [
             {
-                "name": "proton-clang",
-                "repo": "https://github.com/kdrag0n/proton-clang",
-                "branch": "master",
+                "name": "clang",
+                "repo": "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86",
                 "binaryEnv": ["./bin"]
             }
         ],
@@ -21,15 +20,15 @@
             "CC": "clang",
             "externalCommands": {
                 "CLANG_TRIPLE": "aarch64-linux-gnu-",
-                "CROSS_COMPILE": "proton-clang/bin/aarch64-linux-gnu-",
-                "CROSS_COMPILE_ARM32": "proton-clang/bin/arm-linux-gnueabi-",
-                "AS": "proton-clang/bin/llvm-as", 
-                "AR": "proton-clang/bin/llvm-ar",  
-                "NM":"proton-clang/bin/llvm-nm" ,  
-                "OBJCOPY":"proton-clang/bin/llvm-objcopy",  
-                "OBJDUMP":"proton-clang/bin/llvm-objdump",  
-                "STRIP":"proton-clang/bin/llvm-strip",  
-                "LD":"proton-clang/bin/ld.lld", 
+                "CROSS_COMPILE": "clang/bin/aarch64-linux-gnu-",
+                "CROSS_COMPILE_ARM32": "clang/bin/arm-linux-gnueabi-",
+                "AS": "clang/bin/llvm-as", 
+                "AR": "clang/bin/llvm-ar",  
+                "NM":"clang/bin/llvm-nm" ,  
+                "OBJCOPY":"clang/bin/llvm-objcopy",  
+                "OBJDUMP":"clang/bin/llvm-objdump",  
+                "STRIP":"clang/bin/llvm-strip",  
+                "LD":"clang/bin/ld.lld", 
                 "LTO": "thin"
             }
         },
