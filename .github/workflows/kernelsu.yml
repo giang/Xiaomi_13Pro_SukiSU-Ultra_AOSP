@@ -1,9 +1,9 @@
 name: Build Kernels - KernelSU
 
 on:
-  push:
-    paths:
-      - ".github/workflows/kernelsu.yml"
+  # push:
+  #   paths:
+  #     - ".github/workflows/kernelsu.yml"
   workflow_dispatch:
   schedule:
     - cron: "14 13 * * 5"
@@ -242,7 +242,7 @@ jobs:
           fi
 
           # Apply new KernelSU patches
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
 
           cat arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
 
@@ -418,6 +418,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: ${{ env.USE_ANYKERNEL3 == 'true' && env.CONFIRM_RELEASE == 'true' }}
         with:
-          tag_name: v${{ env.BUILD_DATE }}.${{ github.run_number }}
+          tag_name: KernelSU v${{ env.BUILD_DATE }}.${{ github.run_number }}
           files: "${{ env.ANYKERNEL3_FILE }}.zip"
           generate_release_notes: true
