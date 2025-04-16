@@ -19,9 +19,8 @@
         "ARCH": "arm64",
         "CC": "clang",
             "externalCommands": {
-                "CLANG_TRIPLE": "aarch64-linux-gnu-",
-                "CROSS_COMPILE": "aarch64-linux-android-",
-                "CROSS_COMPILE_ARM32": "arm-linux-androideabi-",
+                "CROSS_COMPILE": "aarch64-linux-gnu-",
+                "CROSS_COMPILE_ARM32": "arm-linux-gnueabi-",
                 "LD": "ld.lld",
                 "AR": "llvm-ar",
                 "NM": "llvm-nm",
@@ -33,7 +32,7 @@
                 "LDGOLD": "aarch64-linux-gnu-ld.gold",
                 "LLVM_AR": "llvm-ar",
                 "LLVM_DIS": "llvm-dis",
-                "CONFIG_THINLTO": ""
+                "LTO": "thin"
             }
         },
         "AnyKernel3": {
