@@ -43,7 +43,11 @@
                 "branch": "gki-2.0"
             }
         },
-        "enableKernelSU": true
-        "enableLXC": false
+        "enableKernelSU": true,
+        "enableLXC": false,
+        "KernelSUSFS": {
+            "enable": true,
+            "branches": "gki-android13-5.15"
+        }
     }
 ]
