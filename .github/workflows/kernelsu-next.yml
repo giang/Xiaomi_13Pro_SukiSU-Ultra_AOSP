@@ -304,7 +304,6 @@ jobs:
           echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
           echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
           echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          sed -i '$s|echo "\$res"|echo "\$res-liqideqq"|' ./scripts/setlocalversion
           
           # Add additional tmpfs config setting
           echo "CONFIG_TMPFS_XATTR=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
@@ -360,13 +359,17 @@ jobs:
             echo "🎖️ Apply xt_qtaguid.patch"
           fi
 
-      - name: 🧹 Commit to avoid dirty
+      - name: 🧹 Config Kernel Name
         working-directory: ${{ env.KERNEL_NAME }}
+        env: 
+          ARCH: ${{ steps.generate-args.outputs.ARCH }}
         run: |
-          rm android/abi_gki_protected_exports_* || echo "No protected exports!"
-          git config --global user.email "bot@kernelsu.org"
-          git config --global user.name "KernelSUBot"
-          git add -A && git commit -a -m "Add KernelSU"
+          sed -i '$s|echo "\$res"|echo "\$res-nnn950711"|' ./scripts/setlocalversion
+          # Run perl command to modify UTS_VERSION
+          perl -pi -e 's{UTS_VERSION="\$\(echo \$UTS_VERSION \$CONFIG_FLAGS \$TIMESTAMP \| cut -b -\$UTS_LEN\)"}{UTS_VERSION="#1 SMP PREEMPT Sat Apr 20 04:20:00 UTC 2024"}' ./scripts/mkcompile_h
+          sed -i 's/-dirty//' ./scripts/setlocalversion
+          rm -rf ./android/abi_gki_protected_exports_*
+          sed -E -i '/^CONFIG_LOCALVERSION=/ s/(.*)"$/\1-nnn950711"/' ./arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }} 
 
       - name: 👍 Start building the kernel
         working-directory: ${{ env.KERNEL_NAME }}
