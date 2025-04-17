@@ -251,8 +251,8 @@ jobs:
 
       - name: 😋 Setup KSU SUSFS
         env: 
-            ARCH: ${{ steps.generate-args.outputs.ARCH }}
-            SFS_BRANCH: ${{ matrix.CONFIG.KernelSUSFS.branches }}
+          ARCH: ${{ steps.generate-args.outputs.ARCH }}
+          SFS_BRANCH: ${{ matrix.CONFIG.KernelSUSFS.branches }}
         if: ${{ env.ENABLE_KERNELSU == 'true' && env.ENABLE_KERNELSU_SFS == 'true' }}
         run: |
           # Clone repositories using the branch names
