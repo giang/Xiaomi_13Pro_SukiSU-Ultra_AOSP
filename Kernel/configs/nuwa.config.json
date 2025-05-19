@@ -3,7 +3,7 @@
         "kernelSource": {
         "name": "nuwa-kernel_xiaomi_sm8550",
         "repo": "https://github.com/giang/android_kernel_xiaomi_sm8550.git",
-        "branch": "android13-5.15-2025-03",
+        "branch": "15.0",
         "device": "gki",
         "defconfig": "gki_defconfig"
         },
