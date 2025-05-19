@@ -43,7 +43,7 @@
                 "branch": "gki-2.0"
             }
         },
-        "enableLXC": false,
+        "enableLXC": true,
         "enableKernelSU": true,
         "KernelSUSFS": {
             "enable": true,
