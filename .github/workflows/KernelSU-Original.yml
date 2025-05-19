@@ -274,7 +274,7 @@ jobs:
 
           # Apply common SUSFS patch
           cd ..
-          patch -p1 < 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch || true
+          #patch -p1 < 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch || true
 
           # Apply New Hooks Patches
           cp ../kernel_patches/next/syscall_hooks.patch ./
