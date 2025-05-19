@@ -67,6 +67,9 @@ jobs:
       # Whether to enable KernelSU
       ENABLE_KERNELSU: ${{ matrix.CONFIG.enableKernelSU }}
 
+      # Whether to enable KernelSU SFS
+      ENABLE_KERNELSU_SFS: ${{ matrix.CONFIG.KernelSUSFS.enable }}
+
       # Whether to enable LXC docker
       ENABLE_LXC: ${{ matrix.CONFIG.enableLXC }}
 
@@ -231,7 +234,8 @@ jobs:
         working-directory: ${{ env.KERNEL_NAME }}
         env:
           ARCH: ${{ steps.generate-args.outputs.ARCH }}
-        if: ${{ env.ENABLE_KERNELSU == 'true' }}
+          SFS_BRANCH: ${{ matrix.CONFIG.KernelSUSFS.branches }}
+        if: ${{ env.ENABLE_KERNELSU == 'true' && env.ENABLE_KERNELSU_SFS == 'true' }}
         run: |
           # Delete old KernelSU
           if [ -d "./KernelSU" ]; then
