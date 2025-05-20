@@ -320,8 +320,8 @@ jobs:
           echo "CONFIG_CRYPTO_842=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
 
           #Remove check_defconfig
-          sudo sed -i 's/check_defconfig//' ../build.config.gki
-          cd ../
+          sudo sed -i 's/check_defconfig//' build.config.gki
+          #cd ../
           git add -A && git commit -a -m "BUILD Kernel"
 
           cat arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
