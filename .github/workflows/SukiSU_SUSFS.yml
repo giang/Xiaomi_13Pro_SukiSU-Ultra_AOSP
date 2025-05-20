@@ -322,7 +322,7 @@ jobs:
           #Remove check_defconfig
           sudo sed -i 's/check_defconfig//' build.config.gki
           #cd ../
-          git add -A && git commit -a -m "BUILD Kernel"
+          #git add -A && git commit -a -m "BUILD Kernel"
 
           cat arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
 
