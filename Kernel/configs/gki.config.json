@@ -3,7 +3,7 @@
         "kernelSource": {
         "name": "gki-kernel_xiaomi_sm8550",
         "repo": "https://github.com/Vermeer-Development/kernel_xiaomi_sm8550.git",
-        "branch": "lineage-22.2",
+        "branch": "Ksu",
         "device": "gki",
         "defconfig": "gki_defconfig"
         },
