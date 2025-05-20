@@ -272,16 +272,22 @@ jobs:
           cp ../susfs4ksu/kernel_patches/fs/* ./fs/
           cp ../susfs4ksu/kernel_patches/include/linux/* ./include/linux/
 
+          #lz4k
+          cp -r ../SukiSU_patch/other/zram/lz4k/include/linux/* ./include/linux
+          cp -r ../SukiSU_patch/other/zram/lz4k/lib/* ./lib
+          cp -r ../SukiSU_patch/other/zram/lz4k/crypto/* ./crypto
+          cp -r ../SukiSU_patch/other/zram/lz4k_oplus ./lib/
+
           # Apply common SUSFS patch
           sed -i 's/-32,12 +32,38/-32,11 +32,37/g' 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch
           sed -i '/#include <trace\/hooks\/fs.h>/d' 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch
           patch -p1 < 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch || true
           
-          cp ../../SukiSU_patch/hooks/syscall_hooks.patch ./
+          cp ../SukiSU_patch/hooks/syscall_hooks.patch ./
           patch -p1 -F 3 < syscall_hooks.patch
 
           # Apply lz4kd Patches
-          cp ../../SukiSU_patch/other/zram/zram_patch/${{ github.event.inputs.KERNEL_VERSION }}/lz4kd.patch ./
+          cp ../SukiSU_patch/other/zram/zram_patch/${{ github.event.inputs.KERNEL_VERSION }}/lz4kd.patch ./
           patch -p1 -F 3 < lz4kd.patch || true
 
           # Add KSU configuration settings
