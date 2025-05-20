@@ -1,4 +1,4 @@
-name: Build Kernels - KernelSU Original
+name: Build Kernels - SukiSU SUSFS
 
 on:
   # push:
@@ -245,11 +245,16 @@ jobs:
           fi
 
           # Apply new KernelSU patches
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
+          curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-dev
+          cd ./KernelSU
+          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10606)
+          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
+          export KSU_VERSION=$KSU_VERSION
+          sed -i "s/DKSU_VERSION=12800/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
           
           cat arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
           
-      - name: 😋 Setup KSU SUSFS
+      - name: 😋 Setup SukiSU SUSFS
         env: 
           ARCH: ${{ steps.generate-args.outputs.ARCH }}
           SFS_BRANCH: ${{ matrix.CONFIG.KernelSUSFS.branches }}
@@ -257,7 +262,7 @@ jobs:
         run: |
           # Clone repositories using the branch names
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "${{ env.SFS_BRANCH }}"
-          git clone https://github.com/WildPlusKernel/kernel_patches.git
+          git clone https://github.com/ShirkNeko/SukiSU_patch.git
 
           # Copy SUSFS patches
           cd ${{ env.KERNEL_NAME }}
@@ -266,29 +271,26 @@ jobs:
           cp ../susfs4ksu/kernel_patches/fs/* ./fs/
           cp ../susfs4ksu/kernel_patches/include/linux/* ./include/linux/
 
-          # Applying SUSFS patches
-          cd ./KernelSU
-          patch -p1 < 10_enable_susfs_for_ksu.patch || true
-          #cp ../../kernel_patches/next/kernel-patch-susfs-v1.5.7-to-KernelSU-Next.patch ./
-          #patch -p1 --forward --fuzz=3 < kernel-patch-susfs-v1.5.7-to-KernelSU-Next.patch || true
-
           # Apply common SUSFS patch
           cd ..
+          sed -i 's/-32,12 +32,38/-32,11 +32,37/g' 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch
+          sed -i '/#include <trace\/hooks\/fs.h>/d' 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch
           patch -p1 < 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch || true
-
-          # Apply New Hooks Patches
-          cp ../kernel_patches/next/syscall_hooks.patch ./
-            patch -p1 -F 3 < syscall_hooks.patch
           
-          # Apply Hide Stuff Patches
-          cp ../kernel_patches/69_hide_stuff.patch ./
-          patch -p1 -F 3 < 69_hide_stuff.patch
+          cp ../../SukiSU_patch/hooks/syscall_hooks.patch ./
+          patch -p1 -F 3 < syscall_hooks.patch
+
+          # Apply lz4kd Patches
+          cp ../../SukiSU_patch/other/zram/zram_patch/${{ github.event.inputs.KERNEL_VERSION }}/lz4kd.patch ./
+          patch -p1 -F 3 < lz4kd.patch || true
 
           # Add KSU configuration settings
           echo "CONFIG_KSU=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_VFS=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_WITH_KPROBES=n" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
 
+          # Add VFS configuration settings
+          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          echo "CONFIG_KSU_MANUAL_HOOK=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          
           # Add SUSFS configuration settings
           echo "CONFIG_KSU_SUSFS=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
           echo "CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
@@ -305,16 +307,16 @@ jobs:
           echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
           echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
           echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
           
-          # Add additional tmpfs config setting
-          echo "CONFIG_TMPFS_XATTR=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_TMPFS_POSIX_ACL=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          echo "CONFIG_CRYPTO_LZ4HC=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          echo "CONFIG_CRYPTO_LZ4K=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          echo "CONFIG_CRYPTO_LZ4KD=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          echo "CONFIG_CRYPTO_842=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
 
-          # Add additional config setting
-          echo "CONFIG_IP_NF_TARGET_TTL=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_IP6_NF_TARGET_HL=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_IP6_NF_MATCH_HL=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          #Remove check_defconfig
+          sudo sed -i 's/check_defconfig//' ../build.config.gki
+          cd ../
+          git add -A && git commit -a -m "BUILD Kernel"
 
           cat arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
 
