@@ -245,7 +245,7 @@ jobs:
           fi
 
           # Apply new KernelSU patches
-          curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-dev
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-dev
           cd ./KernelSU
           KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10606)
           echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
@@ -261,6 +261,7 @@ jobs:
           SFS_BRANCH: ${{ matrix.CONFIG.KernelSUSFS.branches }}
         if: ${{ env.ENABLE_KERNELSU == 'true' && env.ENABLE_KERNELSU_SFS == 'true' }}
         run: |
+          CONFIG_FILE=arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
           # Clone repositories using the branch names
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "${{ env.SFS_BRANCH }}"
           git clone https://github.com/ShirkNeko/SukiSU_patch.git
@@ -279,8 +280,8 @@ jobs:
           cp -r ../SukiSU_patch/other/zram/lz4k_oplus ./lib/
 
           # Apply common SUSFS patch
-          sed -i 's/-32,12 +32,38/-32,11 +32,37/g' 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch
-          sed -i '/#include <trace\/hooks\/fs.h>/d' 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch
+          #sed -i 's/-32,12 +32,38/-32,11 +32,37/g' 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch
+          #sed -i '/#include <trace\/hooks\/fs.h>/d' 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch
           patch -p1 < 50_add_susfs_in_${{ env.SFS_BRANCH }}.patch || true
           
           cp ../SukiSU_patch/hooks/syscall_hooks.patch ./
@@ -291,36 +292,36 @@ jobs:
           patch -p1 -F 3 < lz4kd.patch || true
 
           # Add KSU configuration settings
-          echo "CONFIG_KSU=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          echo "CONFIG_KSU=y" >> "$CONFIG_FILE"
 
           # Add VFS configuration settings
-          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_MANUAL_HOOK=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_MANUAL_HOOK=y" >> "$CONFIG_FILE"
           
           # Add SUSFS configuration settings
-          echo "CONFIG_KSU_SUSFS=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_SUS_PATH=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_SUS_MOUNT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_SUS_KSTAT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_SUS_OVERLAYFS=n" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_TRY_UMOUNT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_SPOOF_UNAME=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_ENABLE_LOG=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          echo "CONFIG_KSU_SUSFS=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_SUS_PATH=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_SUS_MOUNT=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_SUS_KSTAT=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_SUS_OVERLAYFS=n" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_TRY_UMOUNT=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_SPOOF_UNAME=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_ENABLE_LOG=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> "$CONFIG_FILE"
+          echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> "$CONFIG_FILE"
           
-          echo "CONFIG_CRYPTO_LZ4HC=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_CRYPTO_LZ4K=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_CRYPTO_LZ4KD=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
-          echo "CONFIG_CRYPTO_842=y" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          echo "CONFIG_CRYPTO_LZ4HC=y" >> "$CONFIG_FILE"
+          echo "CONFIG_CRYPTO_LZ4K=y" >> "$CONFIG_FILE"
+          echo "CONFIG_CRYPTO_LZ4KD=y" >> "$CONFIG_FILE"
+          echo "CONFIG_CRYPTO_842=y" >> "$CONFIG_FILE"
 
           #Remove check_defconfig
-          sudo sed -i 's/check_defconfig//' build.config.gki
+          #sudo sed -i 's/check_defconfig//' build.config.gki
           #cd ../
           #git add -A && git commit -a -m "BUILD Kernel"
 
