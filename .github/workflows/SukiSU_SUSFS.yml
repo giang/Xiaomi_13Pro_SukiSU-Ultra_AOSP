@@ -287,7 +287,7 @@ jobs:
           patch -p1 -F 3 < syscall_hooks.patch
 
           # Apply lz4kd Patches
-          cp ../SukiSU_patch/other/zram/zram_patch/${{ github.event.inputs.KERNEL_VERSION }}/lz4kd.patch ./
+          cp ../SukiSU_patch/other/zram/zram_patch/5.15/lz4kd.patch ./
           patch -p1 -F 3 < lz4kd.patch || true
 
           # Add KSU configuration settings
