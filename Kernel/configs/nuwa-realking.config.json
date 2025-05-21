@@ -1,11 +1,11 @@
 [
     {
         "kernelSource": {
-        "name": "nuwa-realking-kernel_xiaomi_sm8550",
-        "repo": "https://github.com/giang/nuwa_kernel_sm8550.git",
-        "branch": "main",
+        "name": "nuwa-gki-kernel_xiaomi_sm8550",
+        "repo": "https://github.com/xiaomi-8550/android_kernel_xiaomi_sm8550.git",
+        "branch": "vauxite-15",
         "device": "gki",
-        "defconfig": "gki_defconfig"
+        "defconfig": "vendor/nuwa_GKI.config gki_defconfig "
         },
         "toolchains": [
             {
