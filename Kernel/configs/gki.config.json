@@ -5,7 +5,7 @@
         "repo": "https://github.com/giang/fuxi_kernel_xiaomi_sm8550.git",
         "branch": "fuxi",
         "device": "gki",
-        "defconfig": "gki_defconfig"
+        "defconfig": "vendor/nuwa_GKI.config"
         },
         "toolchains": [
             {
