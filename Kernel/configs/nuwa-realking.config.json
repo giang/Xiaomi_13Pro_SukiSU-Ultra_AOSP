@@ -5,7 +5,7 @@
         "repo": "https://github.com/xiaomi-8550/android_kernel_xiaomi_sm8550.git",
         "branch": "vauxite-15",
         "device": "gki",
-        "defconfig": "vendor/nuwa_GKI.config gki_defconfig "
+        "defconfig": "vendor/nuwa_GKI.config"
         },
         "toolchains": [
             {
