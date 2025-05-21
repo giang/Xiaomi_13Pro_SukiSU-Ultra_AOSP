@@ -1,9 +1,9 @@
 [
     {
         "kernelSource": {
-        "name": "gki-kernel_xiaomi_sm8550",
-        "repo": "https://github.com/Vermeer-Development/kernel_xiaomi_sm8550.git",
-        "branch": "Ksu",
+        "name": "nuwa-gki-kernel_xiaomi_sm8550",
+        "repo": "https://github.com/xiaomi-8550/android_kernel_xiaomi_sm8550.git",
+        "branch": "vauxite-15",
         "device": "gki",
         "defconfig": "gki_defconfig"
         },
