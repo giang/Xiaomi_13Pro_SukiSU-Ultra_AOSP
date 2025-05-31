@@ -230,7 +230,7 @@ jobs:
 
           echo "🤔 $args"
 
-      - name: 😋 Setup KernelSU by SukiSU
+      - name: 😋 Setup SukiSU Ultra
         working-directory: ${{ env.KERNEL_NAME }}
         env:
           ARCH: ${{ steps.generate-args.outputs.ARCH }}
@@ -247,9 +247,11 @@ jobs:
           # Apply new KernelSU patches
           curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-dev
           cd ./KernelSU
+          
           KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10606)
           echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
           export KSU_VERSION=$KSU_VERSION
+          
           sed -i "s/DKSU_VERSION=12800/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
 
           cd ../
@@ -319,7 +321,10 @@ jobs:
           echo "CONFIG_CRYPTO_LZ4K=y" >> "$CONFIG_FILE"
           echo "CONFIG_CRYPTO_LZ4KD=y" >> "$CONFIG_FILE"
           echo "CONFIG_CRYPTO_842=y" >> "$CONFIG_FILE"
-
+          
+          # Enable KPM
+          echo "CONFIG_KPM=y" >> "$CONFIG_FILE"
+          
           #Remove check_defconfig
           #sudo sed -i 's/check_defconfig//' build.config.gki
           #cd ../
