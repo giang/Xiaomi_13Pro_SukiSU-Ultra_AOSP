@@ -339,8 +339,10 @@ jobs:
           CONFIG_FILE=arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
           cd ${{ env.KERNEL_NAME }}
           sed -i 's/${scm_version}//' scripts/setlocalversion
+          sed -i 's/-dirty//' scripts/setlocalversion
           echo 'CONFIG_LOCALVERSION="-giang@techs.review"' >> "$CONFIG_FILE"
-
+          echo "CONFIG_LOCALVERSION_AUTO=y" >> "$CONFIG_FILE"
+          
       - name: 😋 Setup LXC docker
         working-directory: ${{ env.KERNEL_NAME }}
         env:
@@ -395,6 +397,18 @@ jobs:
           make ${{ env.ARGS }} ${{ env.KERNEL_DEFCONFIG_PATH }}
           make ${{ env.ARGS }}
           # tree ${{ env.OUT_DIR }}
+
+      - name: 🔥 Add KPM patch
+        env: 
+          ARCH: ${{ steps.generate-args.outputs.ARCH }}
+        run: |         
+          echo "Patching Image file..."
+          cd "${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot"
+          curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU_patch/refs/heads/main/kpm/patch_linux" -o patch
+          chmod 777 patch
+          ./patch
+          rm -rf Image
+          mv oImage Image
 
       - name: 💛 Upload Image
         uses: actions/upload-artifact@v4
