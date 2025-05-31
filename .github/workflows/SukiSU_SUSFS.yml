@@ -523,6 +523,26 @@ jobs:
       - name: 🧧 Create GitHub Release => (${{ env.BUILD_DATE }})
         env:
           ANYKERNEL3_FILE: "${{ env.WORKSPACE }}/AnyKernel3-${{ env.KERNEL_NAME }}-SukiSU_Ultra-${{ env.BUILD_DATE }}"
+          RELEASE_NAME: "Xiaomi 13 Pro (Nuwa) - GKI / SukiSU Ultra / KPM / SUSFS"
+          RELEASE_NOTES: |
+            This release contains SukiSU Ultra and SUSFS
+                    
+            Features:
+            -> SukiSU Ultra
+            -> SUSFS ඞ
+            -> Manual Hooks for Better Hiding
+            -> Wireguard Support
+            -> Simple Maphide for LineageOS Detections
+            -> Futile Maphide for jit-zygote-cache Detections
+            -> Magic Mount Support
+            
+            Notes:
+            -> SUS SU Mode 2 will show as disabled or not compatble due to non-kprobe hooks and is not needed anymore!
+            -> Kernel Flasher is broken with latest susfs, try https://github.com/libxzr/HorizonKernelFlasher!
+            
+            Module: 
+            -> https://github.com/sidex15/ksu_module_susfs
+            
         continue-on-error: true
         uses: softprops/action-gh-release@v1
         if: ${{ env.USE_ANYKERNEL3 == 'true' && env.CONFIRM_RELEASE == 'true' }}
@@ -530,3 +550,5 @@ jobs:
           tag_name: Nuwa-SukiSU_Ultra-v${{ env.BUILD_DATE }}.${{ github.run_number }}
           files: "${{ env.ANYKERNEL3_FILE }}.zip"
           generate_release_notes: true
+          name: ${{ env.RELEASE_NAME }}  # Pass the RELEASE_NAME to the action
+          body: ${{ env.RELEASE_NOTES }}  # Pass the RELEASE_NOTES to the action
