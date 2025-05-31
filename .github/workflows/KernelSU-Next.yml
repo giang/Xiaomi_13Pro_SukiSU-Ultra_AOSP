@@ -495,7 +495,7 @@ jobs:
 
       - name: 🧧 Create GitHub Release => (${{ env.BUILD_DATE }})
         env:
-          ANYKERNEL3_FILE: "${{ env.WORKSPACE }}/AnyKernel3-${{ env.KERNEL_NAME }}-SukiSU_Ultra-${{ env.BUILD_DATE }}"
+          ANYKERNEL3_FILE: "${{ env.WORKSPACE }}/AnyKernel3-${{ env.KERNEL_NAME }}-KernelSU_Next-${{ env.BUILD_DATE }}"
           RELEASE_NAME: "Xiaomi 13 Pro (Nuwa) - GKI / KernelSU Next / KPM / SUSFS"
           RELEASE_NOTES: |
             This release contains KernelSU Next and SUSFS
@@ -520,7 +520,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: ${{ env.USE_ANYKERNEL3 == 'true' && env.CONFIRM_RELEASE == 'true' }}
         with:
-          tag_name: Nuwa-SukiSU_Ultra-v${{ env.BUILD_DATE }}.${{ github.run_number }}
+          tag_name: Nuwa-KernelSU_Next-v${{ env.BUILD_DATE }}.${{ github.run_number }}
           files: "${{ env.ANYKERNEL3_FILE }}.zip"
           generate_release_notes: true
           name: ${{ env.RELEASE_NAME }}  # Pass the RELEASE_NAME to the action
