@@ -337,6 +337,7 @@ jobs:
           ARCH: ${{ steps.generate-args.outputs.ARCH }}
         run: |
           CONFIG_FILE=arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          cd ${{ env.KERNEL_NAME }}
           sed -i 's/${scm_version}//' scripts/setlocalversion
           echo 'CONFIG_LOCALVERSION="-giang@techs.review"' >> "$CONFIG_FILE"
 
