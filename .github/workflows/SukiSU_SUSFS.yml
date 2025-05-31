@@ -331,6 +331,14 @@ jobs:
           #git add -A && git commit -a -m "BUILD Kernel"
 
           cat arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          
+      - name: 😋 Add Custom Kernel Name
+        env: 
+          ARCH: ${{ steps.generate-args.outputs.ARCH }}
+        run: |
+          CONFIG_FILE=arch/${{ env.ARCH }}/configs/${{ env.KERNEL_DEFCONFIG_PATH }}
+          sed -i 's/${scm_version}//' scripts/setlocalversion
+          echo 'CONFIG_LOCALVERSION="-giang@techs.review"' >> "$CONFIG_FILE"
 
       - name: 😋 Setup LXC docker
         working-directory: ${{ env.KERNEL_NAME }}
