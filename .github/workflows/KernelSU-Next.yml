@@ -382,7 +382,19 @@ jobs:
           make ${{ env.ARGS }} ${{ env.KERNEL_DEFCONFIG_PATH }}
           make ${{ env.ARGS }}
           # tree ${{ env.OUT_DIR }}
-
+          
+      - name: 🔥 Add KPM patch
+        env: 
+          ARCH: ${{ steps.generate-args.outputs.ARCH }}
+        run: |         
+          echo "Patching Image file..."
+          cd "${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot"
+          curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU_patch/refs/heads/main/kpm/patch_linux" -o patch
+          chmod 777 patch
+          ./patch
+          rm -rf Image
+          mv oImage Image
+          
       - name: 💛 Upload Image
         uses: actions/upload-artifact@v4
         env:
